@@ -9,15 +9,19 @@ function calculateSum(counter) {
     }
     return sum;
 }
+function createUser(req, res) {
+    res.send("heeloos");
+}
 
 function handleFirstRequest(req, res) {
-    var calculatedSum = calculateSum(100);
-    console.log(calculatedSum);
+    var counter = req.query.counter;
+    var calculatedSum = calculateSum(counter);
     var answer = "The sum is " + calculatedSum;
     res.send(answer);
 }
 
 app.get('/handleSum', handleFirstRequest);
+app.post('/createUser', createUser)
 function started() {
     console.log(`app listening on port ${port}`)
 }
