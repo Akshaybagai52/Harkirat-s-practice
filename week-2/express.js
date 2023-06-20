@@ -20,7 +20,7 @@ function handleFirstRequest(req, res) {
     res.send(answer);
 }
 
-app.get('/handleSum', handleFirstRequest);
+app.get('/handleSum', handleFirstRequest );
 app.post('/createUser', createUser)
 function started() {
     console.log(`app listening on port ${port}`)
