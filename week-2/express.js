@@ -19,12 +19,7 @@ function handleFirstRequest(req, res) {
     var answer = "The sum is " + calculatedSum;
     res.send(answer);
 }
-function handleFirstRequest(req, res) {
-    var counter = req.query.counter;
-    var calculatedSum = calculateSum(counter);
-    var answer = "The sum is " + calculatedSum;
-    res.send(answer);
-}
+
 
 app.get('/handleSum', handleFirstRequest );
 app.post('/createUser', createUser)
