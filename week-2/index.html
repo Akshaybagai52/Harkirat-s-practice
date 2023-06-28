@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="index.css">
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Todo App</h1>
+    <div>
+      <label>title: <input type="text" id="text-input" /></label>
+      <label>Description: <input type="text" id="desc-input" /></label>
+      <button type="submit" onclick="submitFn()">Submit</button>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody id="input-data">
+            
+        </tbody>
+    </table>
+
+    <script>
+      let submitFn = (e) => {
+        let textIn = document.getElementById("text-input").value;
+        let descIn = document.getElementById("desc-input").value;
+        let tableBody = document.getElementById("input-data");
+        
+        console.log(textIn);
+        fetch("http://localhost:3000/todos", {
+          method: "POST",
+          body: JSON.stringify({
+            title: textIn,
+            description: descIn,
+          }),
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+          },
+        })
+          .then((response) => response.json())
+          .then((json) => 
+           {
+            let newRow = document.createElement("tr");
+            newRow.innerHTML = `
+            <td>${json.id}</td>
+            <td>${json.title}</td>
+            <td>${json.description}</td>
+            `;
+            tableBody.appendChild(newRow);
+           }
+          );
+
+          textIn = "";
+          descIn = "";
+      };
+    </script>
+  </body>
+</html>
