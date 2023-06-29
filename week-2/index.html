@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="index.css" />
     <title>Document</title>
   </head>
   <body>
@@ -14,24 +14,54 @@
       <button type="submit" onclick="submitFn()">Submit</button>
     </div>
     <table>
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Title</th>
-                <th>Description</th>
-            </tr>
-        </thead>
-        <tbody id="input-data">
-            
-        </tbody>
+      <thead>
+        <tr>
+          <th>Id</th>
+          <th>Title</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody id="input-data"></tbody>
     </table>
 
     <script>
+      const deleteFn = (id) => {
+        fetch("http://localhost:3000/todos/" + id, {
+          method: "DELETE",
+        })
+          .then((res) => res.text())
+          .then((res) => console.log(res));
+      };
+
+      let tableBody = document.getElementById("input-data");
+      const getData = () => {
+        return fetch("http://localhost:3000/todos")
+          .then((res) => {
+            return res.json();
+          })
+          .catch(() => {
+            console.error("Error in fetching data");
+          });
+      };
+      getData()
+        .then((data) => {
+          data.map((item) => {
+            let newRow = document.createElement("tr");
+            newRow.innerHTML = `
+            <td>${item.id}</td>
+            <td>${item.title}</td>
+            <td>${item.description}</td>
+            <td><button onclick="${deleteFn(item.id)}">Delete</button></td>
+            `;
+            tableBody.appendChild(newRow);
+          });
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
       let submitFn = (e) => {
         let textIn = document.getElementById("text-input").value;
         let descIn = document.getElementById("desc-input").value;
-        let tableBody = document.getElementById("input-data");
-        
         console.log(textIn);
         fetch("http://localhost:3000/todos", {
           method: "POST",
@@ -44,20 +74,18 @@
           },
         })
           .then((response) => response.json())
-          .then((json) => 
-           {
+          .then((json) => {
             let newRow = document.createElement("tr");
             newRow.innerHTML = `
             <td>${json.id}</td>
             <td>${json.title}</td>
             <td>${json.description}</td>
+            <td><button onclick="${deleteFn(json.id)}">Delete</button></td>
             `;
             tableBody.appendChild(newRow);
-           }
-          );
-
-          textIn = "";
-          descIn = "";
+            textIn.value = "";
+            descIn.value = "";
+          });
       };
     </script>
   </body>
